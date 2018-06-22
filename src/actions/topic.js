@@ -11,6 +11,6 @@ export const fetchTopics = (params = {}) => (
   dispatch =>
     apiCalls.getTopics(params)
     .then(response => response.json())
-    .then(topics => dispatch(receiveTopics(topics)))
+    .then(topics => dispatch(receiveTopics(topics.items)))
     .catch(error => console.warning('Fetch error in topics'))
 );

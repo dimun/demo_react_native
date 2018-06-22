@@ -11,6 +11,6 @@ export const fetchRepositories = (params = {}) => (
   dispatch =>
     apiCalls.getRepositories(params)
     .then(response => response.json())
-    .then(repositories => dispatch(receiveRepositories(repositories)))
+    .then(repositories => dispatch(receiveRepositories(repositories.items)))
     .catch(error => console.warning('Fetch error in repositories'))
 );

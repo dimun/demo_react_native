@@ -5,7 +5,10 @@ import {
   Text,
   TextInput,
   View,
+  FlatList,
 } from 'react-native';
+import Topic from 'src/components/Topic';
+import Repository from 'src/components/Repository';
 import { i18nMessage } from 'src/i18n';
 
 class Main extends Component {
@@ -26,6 +29,14 @@ class Main extends Component {
     fetchTopics({ q: this.state.keyword });
   }
 
+  topicKeyExtractor = (item) => item.name
+
+  repositoryKeyExtractor = (item) => item.id.toString()
+  
+  renderTopic = ({ item }) => (<Topic topic={item} />)
+
+  renderRepository = ({ item }) => (<Repository repository={item} />)
+  
   render() {
     const { repositoryStore: { repositories }, topicStore: { topics } } = this.props;
     console.log(topics, repositories);
@@ -34,7 +45,8 @@ class Main extends Component {
         <Text style={styles.welcome}>
           {i18nMessage('screens.main.title')}
         </Text>
-        <View>
+        <View style={styles.textInputContainer}>
+
           <TextInput
             style = {styles.textInput}
             autoCapitalize = "none"
@@ -42,6 +54,26 @@ class Main extends Component {
             autoCorrect={false}
             onSubmitEditing={this.onSearchKeyword}
             value={this.state.keyword}
+          />
+        </View>
+        <View style={styles.topicsContainer}>
+          <Text style={styles.title}>
+            {i18nMessage('screens.main.topics')}
+          </Text>
+          <FlatList
+            renderItem={this.renderTopic}
+            data={topics}
+            keyExtractor={this.topicKeyExtractor}
+          />
+        </View>
+        <View style={styles.topicsContainer}>
+          <Text style={styles.title}>
+            {i18nMessage('screens.main.repositories')}
+          </Text>
+          <FlatList
+            renderItem={this.renderRepository}
+            data={repositories}
+            keyExtractor={this.repositoryKeyExtractor}
           />
         </View>
       </View>
@@ -59,6 +91,16 @@ Main.propTypes = {
 
 export default Main;
 
+/*
+  TODO Explain
+  - flex
+  - zIndex
+  - elevation
+  - position: absolute and relative
+  - fontSize by Dimensions
+  - ImageBackground
+  - Shadows
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,10 +114,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  textInputContainer: {
+    flex: 1,
+  },
+  topicsContainer: {
+    flex: 4,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 20,
   },
   textInput: {
     width: '100%',
